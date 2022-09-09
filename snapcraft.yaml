@@ -1,0 +1,34 @@
+base: core18
+name: ftpscan
+version: '1.0-1'
+summary: Simple ftp scanner for default username / password.
+description: |
+    Scan provided subnet for ftp-servers (or IoT-Devices with ftp-login) with provided
+    username / password.
+
+    Scans approximately one /24 subnet (254 addresses) in 2,5sec.
+
+    Made for the purpose of catching IOT devices with default password on internal networks.
+grade: stable
+confinement: strict
+
+apps:
+  ftpscan:
+    command: bin/snapcraft-preload $SNAP/bin/ftpscan
+    plugs: [network]
+
+parts:
+  # Semaphore-support (Python multitasking)
+  snapcraft-preload:
+    source: https://github.com/diddledan/snapcraft-preload.git
+    source-branch: semaphore-support
+    plugin: cmake
+    build-packages:
+      - on amd64:
+          - gcc-multilib
+          - g++-multilib
+  ftpscan:
+    source: https://github.com/izznogooood/ftpscan.git
+    source-tag: master
+    plugin: python
+
